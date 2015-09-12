@@ -1,5 +1,13 @@
-Todo Demo Web App
-=================
+Assignment 1: Hare and Hounds
+=============================
+Name: Eric Bridgeford
+---------------------
+
+Course: OOSE Fall 2015
+----------------------
+
+Jhed: ebridge2
+--------------
 
 This repository contains a small Todo list web application.  It is a complete web stack from frontend to server to database.
 
