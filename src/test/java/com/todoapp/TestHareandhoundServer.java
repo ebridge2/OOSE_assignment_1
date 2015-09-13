@@ -2,6 +2,9 @@ package com.todoapp;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.oose2015.ebridge2.hareandhounds.Bootstrap;
+import com.oose2015.ebridge2.hareandhounds.Hareandhound;
+
 import org.hamcrest.CustomTypeSafeMatcher;
 import org.hamcrest.Description;
 import org.sql2o.Connection;
@@ -22,7 +25,7 @@ import java.util.stream.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class TestTodoServer {
+public class TestHareandhoundServer {
 
     //------------------------------------------------------------------------//
     // Setup
@@ -54,27 +57,27 @@ public class TestTodoServer {
         
         //Add a few elements
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        Todo[] entries = new Todo[] {
-          new Todo(null, "Test-1", false, df.parse("2015-04-23T23:10:15-0700")),
-          new Todo(null, "Test-2", true, df.parse("2015-03-07T01:10:20-0530")),
-          new Todo(null, "Test-3", false, df.parse("2010-02-19T13:25:43-0530"))
+        Hareandhound[] entries = new Hareandhound[] {
+          new Hareandhound(null, "Test-1", false, df.parse("2015-04-23T23:10:15-0700")),
+          new Hareandhound(null, "Test-2", true, df.parse("2015-03-07T01:10:20-0530")),
+          new Hareandhound(null, "Test-3", false, df.parse("2010-02-19T13:25:43-0530"))
         };
         
-        for (Todo t : entries) {
-            Response radd = request("POST", "/api/v1/todos", t);
+        for (Hareandhound t : entries) {
+            Response radd = request("POST", "/api/v1/hareandhounds", t);
             assertEquals("Failed to add", 201, radd.httpStatus);
         }
 
         //Get them back
-        Response r = request("GET", "/api/v1/todos", null);
-        assertEquals("Failed to get todos", 200, r.httpStatus);
-        List<Todo> results = getTodos(r);
+        Response r = request("GET", "/api/v1/hareandhounds", null);
+        assertEquals("Failed to get hareandhounds", 200, r.httpStatus);
+        List<Hareandhound> results = getHareandhounds(r);
         
         //Verify that we got the right element back
-        assertEquals("Number of todo entries differ", entries.length, results.size());
+        assertEquals("Number of hareandhound entries differ", entries.length, results.size());
         
         for (int i = 0; i < results.size(); i++) {
-            Todo actual = results.get(i);
+            Hareandhound actual = results.get(i);
             assertEquals(String.format("Index %d: Mismatch in title", i), entries[i].getTitle(), actual.getTitle());
             assertEquals(String.format("Index %d: Mismatch in creation date", i), entries[i].getCreatedOn(), actual.getCreatedOn());
             assertEquals(String.format("Index %d: Mismatch in done state", i), entries[i].isDone(), actual.isDone());
@@ -86,29 +89,29 @@ public class TestTodoServer {
         
         //Add a single element
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        Todo expected = new Todo(null, "Test-1", false, df.parse("2015-04-23T23:10:15-0700"));
-        Response r1 = request("POST", "/api/v1/todos", expected);
+        Hareandhound expected = new Hareandhound(null, "Test-1", false, df.parse("2015-04-23T23:10:15-0700"));
+        Response r1 = request("POST", "/api/v1/hareandhounds", expected);
         assertEquals("Failed to add", 201, r1.httpStatus);
 
         //Get it back so that we know its ID
-        Response r2 = request("GET", "/api/v1/todos", null);
-        assertEquals("Failed to get todos", 200, r2.httpStatus);
-        Todo t = getTodos(r2).get(0);
+        Response r2 = request("GET", "/api/v1/hareandhounds", null);
+        assertEquals("Failed to get hareandhounds", 200, r2.httpStatus);
+        Hareandhound t = getHareandhounds(r2).get(0);
         
         //Send out an update with a changed title and state
-        Todo updated = new Todo(t.getId(), t.getTitle(), !t.isDone(), t.getCreatedOn());
-        Response r3 = request("PUT", "/api/v1/todos/" + t.getId(), updated);
+        Hareandhound updated = new Hareandhound(t.getId(), t.getTitle(), !t.isDone(), t.getCreatedOn());
+        Response r3 = request("PUT", "/api/v1/hareandhounds/" + t.getId(), updated);
         assertEquals("Failed to update", 200, r3.httpStatus);
         
         //Get stuff back again
-        Response r4 = request("GET", "/api/v1/todos", null);
-        assertEquals("Failed to get todos", 200, r4.httpStatus);
-        List<Todo> results = getTodos(r4);
+        Response r4 = request("GET", "/api/v1/hareandhounds", null);
+        assertEquals("Failed to get hareandhounds", 200, r4.httpStatus);
+        List<Hareandhound> results = getHareandhounds(r4);
         
         //Verify that we got the right element back
         assertEquals(1, results.size());
         
-        Todo actual = results.get(0);
+        Hareandhound actual = results.get(0);
         assertEquals("Mismatch in Id", updated.getId(), actual.getId());
         assertEquals("Mismatch in title", updated.getTitle(), actual.getTitle());
         assertEquals("Mismatch in creation date", updated.getCreatedOn(), actual.getCreatedOn());
@@ -120,44 +123,44 @@ public class TestTodoServer {
         
         //Add a few elements
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        Todo[] entries = new Todo[] {
-          new Todo(null, "Test-1", false, df.parse("2015-04-23T23:10:15-0700")),
-          new Todo(null, "Test-2", true, df.parse("2015-03-07T01:10:20-0530")),
-          new Todo(null, "Test-3", false, df.parse("2010-02-19T13:25:43-0530"))
+        Hareandhound[] entries = new Hareandhound[] {
+          new Hareandhound(null, "Test-1", false, df.parse("2015-04-23T23:10:15-0700")),
+          new Hareandhound(null, "Test-2", true, df.parse("2015-03-07T01:10:20-0530")),
+          new Hareandhound(null, "Test-3", false, df.parse("2010-02-19T13:25:43-0530"))
         };
         
-        for (Todo t : entries) {
-            Response radd = request("POST", "/api/v1/todos", t);
+        for (Hareandhound t : entries) {
+            Response radd = request("POST", "/api/v1/hareandhounds", t);
             assertEquals("Failed to add", 201, radd.httpStatus);
         }
 
         //Get them back so that we know our ids
-        Response r1 = request("GET", "/api/v1/todos", null);
-        assertEquals("Failed to get todos", 200, r1.httpStatus);
-        List<Todo> data = getTodos(r1);
+        Response r1 = request("GET", "/api/v1/hareandhounds", null);
+        assertEquals("Failed to get hareandhounds", 200, r1.httpStatus);
+        List<Hareandhound> data = getHareandhounds(r1);
         
         //Delete an entry
         int indexToDelete = 1;
-        Response r2 = request("DELETE", "/api/v1/todos/" + data.get(indexToDelete).getId(), null);
-        assertEquals("Failed to delete todo", 200, r2.httpStatus);
+        Response r2 = request("DELETE", "/api/v1/hareandhounds/" + data.get(indexToDelete).getId(), null);
+        assertEquals("Failed to delete hareandhound", 200, r2.httpStatus);
         
         //Get it back again
-        Response r3 = request("GET", "/api/v1/todos", null);
-        assertEquals("Failed to get todos", 200, r3.httpStatus);
-        List<Todo> results = getTodos(r3);
+        Response r3 = request("GET", "/api/v1/hareandhounds", null);
+        assertEquals("Failed to get hareandhounds", 200, r3.httpStatus);
+        List<Hareandhound> results = getHareandhounds(r3);
         
         //Verify that we got the right element back
-        assertEquals("Number of todo entries differ", entries.length - 1, results.size());
+        assertEquals("Number of hareandhound entries differ", entries.length - 1, results.size());
         
-        //Make a new list of expected Todos with some Java 8 functional foo :)
-        List<Todo> expected = IntStream.range(0, entries.length)
+        //Make a new list of expected Hareandhounds with some Java 8 functional foo :)
+        List<Hareandhound> expected = IntStream.range(0, entries.length)
             .filter(i -> i != indexToDelete)
             .mapToObj(i -> entries[i])
             .collect(Collectors.toList());
 
         //And check
         for (int i = 0; i < results.size(); i++) {
-            Todo actual = results.get(i);
+            Hareandhound actual = results.get(i);
             assertEquals(String.format("Index %d: Mismatch in title", i), expected.get(i).getTitle(), actual.getTitle());
             assertEquals(String.format("Index %d: Mismatch in creation date", i), expected.get(i).getCreatedOn(), actual.getCreatedOn());
             assertEquals(String.format("Index %d: Mismatch in done state", i), expected.get(i).isDone(), actual.isDone());
@@ -212,12 +215,12 @@ public class TestTodoServer {
 	}
 
     //------------------------------------------------------------------------//
-    // TodoApp Specific Helper Methods and classes
+    // HareandhoundApp Specific Helper Methods and classes
     //------------------------------------------------------------------------//
 
     private void clearDB() {
         SQLiteDataSource dataSource = new SQLiteDataSource();
-        dataSource.setUrl("jdbc:sqlite:todo.db");
+        dataSource.setUrl("jdbc:sqlite:hareandhound.db");
 
         Sql2o db = new Sql2o(dataSource);
 
@@ -227,10 +230,10 @@ public class TestTodoServer {
         }
     }
 
-    private List<Todo> getTodos(Response r) {
+    private List<Hareandhound> getHareandhounds(Response r) {
         //Getting a useful Type instance for a *generic* container is tricky given Java's type erasure.
         //The technique below is documented in the documentation of com.google.gson.reflect.TypeToken.
-        Type type = (new TypeToken<ArrayList<Todo>>() { }). getType();
+        Type type = (new TypeToken<ArrayList<Hareandhound>>() { }). getType();
         return r.getContentAsObject(type);
     }
 
