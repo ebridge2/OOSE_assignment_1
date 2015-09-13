@@ -3,18 +3,18 @@
 // https://blog.openshift.com/developing-single-page-web-applications-using-java-8-spark-mongodb-and-angularjs/
 //-------------------------------------------------------------------------------------------------------------//
 
-package com.todoapp;
+package com.oose2015.ebridge2.hareandhounds;
 
 import java.util.Date;
 
-public class Todo {
+public class Game {
 
     private String id;
     private String title;
     private boolean done;
     private Date createdOn = new Date();
 
-    public Todo(String id, String title, boolean done, Date createdOn) {
+    public Game(String id, String title, boolean done, Date createdOn) {
         this.id = id;
         this.title = title;
         this.done = done;
@@ -42,12 +42,12 @@ public class Todo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Todo todo = (Todo) o;
+        Hareandhound hareandhounds = (Hareandhound) o;
 
-        if (done != todo.done) return false;
-        if (id != null ? !id.equals(todo.id) : todo.id != null) return false;
-        if (title != null ? !title.equals(todo.title) : todo.title != null) return false;
-        return !(createdOn != null ? !createdOn.equals(todo.createdOn) : todo.createdOn != null);
+        if (done != hareandhounds.done) return false;
+        if (id != null ? !id.equals(hareandhounds.id) : hareandhounds.id != null) return false;
+        if (title != null ? !title.equals(hareandhounds.title) : hareandhounds.title != null) return false;
+        return !(createdOn != null ? !createdOn.equals(hareandhounds.createdOn) : hareandhounds.createdOn != null);
 
     }
 
@@ -62,7 +62,7 @@ public class Todo {
 
     @Override
     public String toString() {
-        return "Todo{" +
+        return "Hareandhound{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
                 ", done=" + done +
