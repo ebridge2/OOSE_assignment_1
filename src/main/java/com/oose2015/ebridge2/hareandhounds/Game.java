@@ -51,10 +51,10 @@ public class Game {
 	}
 	
 	private void populateBoard() {
-		this.gameBoard.put(Point(4,1), new Hare(player2,4,1));
-		this.gameBoard.put(Point(0,1), new Hound(player1,0,1));
-		this.gameBoard.put(Point(1,0), new Hound(player1,1,0));
-		this.gameBoard.put(Point(1,2), new Hound(player1,1,2));
+		this.gameBoard.put(new Point(4,1), new Hare(player2,4,1));
+		this.gameBoard.put(new Point(0,1), new Hound(player1,0,1));
+		this.gameBoard.put(new Point(1,0), new Hound(player1,1,0));
+		this.gameBoard.put(new Point(1,2), new Hound(player1,1,2));
 	}
 	
     @Override
