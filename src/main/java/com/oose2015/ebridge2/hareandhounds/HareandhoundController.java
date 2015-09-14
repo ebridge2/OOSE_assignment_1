@@ -18,7 +18,7 @@ import static spark.Spark.*;
 
 public class HareandhoundController {
 
-    private static final String API_CONTEXT = "/api/v1";
+    private static final String API_CONTEXT = "/hareandhounds/api";
 
     private final HareandhoundService hareandhoundService;
 
@@ -30,16 +30,28 @@ public class HareandhoundController {
     }
 
     private void setupEndpoints() {
-        post(API_CONTEXT + "/games/:gameId", "application/json", (request, response) -> {
+        post(API_CONTEXT + "/games", "application/json", (request, response) -> {
             try {
                 hareandhoundService.createNewHareandhound(request.body());
                 response.status(201);
             } catch (HareandhoundService.HareandhoundServiceException ex) {
-                logger.error("Failed to create new entry");
+                logger.error("Failed to start a game");
                 response.status(500);
             }
             return Collections.EMPTY_MAP;
         }, new JsonTransformer());
+        
+        post(API_CONTEXT + "/games/:gameId", "application/json", (request, response) -> {
+        	try {
+        		hareandhoundService.createNewHareandhound(request.body());
+        		response.status(200);
+        	} catch (HareandhoundService.HareandhoundServiceException ex) {
+        		logger.error("Failed to join a game");
+        		response.error(404);
+        	}
+        	return Collections.EMPTY_MAP;
+        }, new JsonTransformer());
+        
 
         get(API_CONTEXT + "/hareandhound/:id", "application/json", (request, response) -> {
             try {
