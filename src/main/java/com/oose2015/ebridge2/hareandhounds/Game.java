@@ -6,60 +6,57 @@
 package com.oose2015.ebridge2.hareandhounds;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.awt.Point;
+
 
 public class Game {
 
-    private String id;
-    private String title;
-    private boolean done;
-    private Date createdOn = new Date();
-
-    public Game(String id, String title, boolean done, Date createdOn) {
-        this.id = id;
-        this.title = title;
-        this.done = done;
-        this.createdOn = createdOn;
-    }
-    
-    public String getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Hareandhound hareandhounds = (Hareandhound) o;
-
-        if (done != hareandhounds.done) return false;
-        if (id != null ? !id.equals(hareandhounds.id) : hareandhounds.id != null) return false;
-        if (title != null ? !title.equals(hareandhounds.title) : hareandhounds.title != null) return false;
-        return !(createdOn != null ? !createdOn.equals(hareandhounds.createdOn) : hareandhounds.createdOn != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (done ? 1 : 0);
-        result = 31 * result + (createdOn != null ? createdOn.hashCode() : 0);
-        return result;
-    }
-
+	/** the number of pieces that the game has at once
+	 * 
+	 */
+	private static final int NUMPIECES=4;
+	
+	private String gameId;
+	private HashMap<Point, Piece> gameBoard;
+	/** the hound*/
+	private String player1;
+	/** the hare*/
+	private String player2;
+	
+	/**
+	 * initialize an empty game board, with the pieces in their default
+	 * locations
+	 * @param gameid
+	 */
+	public Game(String gameid) {
+		this.gameId = gameid;
+		this.gameBoard = this.initializeBoard();
+		this.populateBoard();
+	}
+	/**
+	 * a function to initialize the empty board
+	 * @return a blank game board
+	 */
+	private HashMap<Point, Piece> initializeBoard() {
+		HashMap<Point, Piece> newgame = new HashMap<>();
+		for (int i = 1; i<=3; i++) {
+			for (int j = 0; j<=2; j++) {
+				newgame.put(new Point(i, j), null);
+			}
+		}
+		newgame.put(new Point(0,1), null);
+		newgame.put(new Point(4,1), null);
+		return newgame;
+	}
+	
+	private void populateBoard() {
+		this.gameBoard.put(Point(4,1), new Hare(player2,4,1));
+		this.gameBoard.put(Point(0,1), new Hound(player1,0,1));
+		this.gameBoard.put(Point(1,0), new Hound(player1,1,0));
+		this.gameBoard.put(Point(1,2), new Hound(player1,1,2));
+	}
+	
     @Override
     public String toString() {
         return "Hareandhound{" +
