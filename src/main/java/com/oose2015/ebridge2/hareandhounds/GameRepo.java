@@ -12,8 +12,12 @@ public class GameRepo {
 	}
 	
 	public Game addGame(Player player1) {
-		Game newgame = new Game(this.numgames++, player1);
+		Game newgame = new Game(++this.numgames, player1);
 		this.gamerepo.put(this.numgames,  newgame);
 		return newgame;
+	}
+	
+	public Game getGame(String gameId) {
+		return this.gamerepo.get(Integer.parseInt(gameId));
 	}
 }

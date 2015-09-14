@@ -32,14 +32,25 @@ public class HareandhoundController {
 
     private void setupEndpoints() {
         post(API_CONTEXT + "/games", "application/json", (request, response) -> {
-
+        	response.status(201);
     		Player player1 = new Player(Player.PLAYER_ONE, PieceType.valueOf("HOUND"));
         	Game gameadded = grepo.addGame(player1);
-        	response.status(201);
         	HashMap<String, String> returnMap = new HashMap<>();
         	returnMap.put("gameId", gameadded.getId());
         	returnMap.put("playerId", player1.getId());
         	returnMap.put("pieceType", player1.getType().toString());
+        	return returnMap;
+        }, new JsonTransformer());
+        put(API_CONTEXT + "/games/:gameId", "application/json", (request, response) -> {
+        	response.status(200);
+        	String gameId = request.params(":gameId");
+        	Player player2 = new Player(Player.PLAYER_TWO, PieceType.valueOf("HARE"));
+        	Game gamejoin = grepo.getGame(gameId);
+        	gamejoin.joinGame(player2);
+        	HashMap<String, String> returnMap = new HashMap<>();
+        	returnMap.put("gameId",  gamejoin.getId());
+        	returnMap.put("playerId",  player2.getId());
+        	returnMap.put("pieceType",  player2.getType().toString());
         	return returnMap;
         }, new JsonTransformer());
     }
