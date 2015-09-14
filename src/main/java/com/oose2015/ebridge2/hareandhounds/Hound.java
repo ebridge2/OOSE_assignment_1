@@ -5,11 +5,13 @@ public class Hound implements Piece {
 	Integer xpos;
 	Integer ypos;
 	String playerid;
-	public Hound(String player, Integer x, Integer y) {
+	public Hound(){
+		//does nothing
+	}
+	public Hound(Integer x, Integer y) {
 		//initialize hare piece
 		this.xpos = x;
 		this.ypos = y;
-		this.playerid = player;
 	}
 	
 	public Integer getX() {

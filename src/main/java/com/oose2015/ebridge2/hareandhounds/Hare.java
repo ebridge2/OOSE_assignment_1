@@ -5,11 +5,13 @@ public class Hare implements Piece{
 	Integer xpos;
 	Integer ypos;
 	String playerid;
-	public Hare(String player, Integer x, Integer y) {
+	public Hare() {
+		//does nothing
+	}
+	public Hare(Integer x, Integer y) {
 		//initialize hare piece
 		this.xpos = x;
 		this.ypos = y;
-		this.playerid = player;
 	}
 	
 	public Integer getX() {

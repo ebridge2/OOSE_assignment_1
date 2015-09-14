@@ -10,5 +10,3 @@ public interface Piece {
 	public void validateMove(Integer newx, Integer newy);
 	
 }
-
-}
