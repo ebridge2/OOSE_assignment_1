@@ -8,15 +8,16 @@ public class Hare implements Piece {
 	private Point pos;
 	/** a way to track the piece type internally for the json return*/
 	private PieceType ptype;
+	/** the player who owns the piece */
+	private final String playerid;
 	/** a hashmap to track the history of the points the hare has been*/
 	HashMap<Point, Integer> history;
-	public Hare() {
-		//does nothing
-	}
-	public Hare(Point startpos) {
+
+	public Hare(Point startpos, String pid) {
 		//initialize hare piece
 		this.pos=startpos;
 		this.ptype = PieceType.valueOf("HARE");
+		this.playerid = pid;
 		this.history = new HashMap<>();
 		history.put(startpos,  1);
 	}
@@ -24,14 +25,19 @@ public class Hare implements Piece {
 		return this.ptype;
 	}
 	
+	public String getPlayer() {
+		return this.playerid;
+	}
+	
 	public Point getPos() {
 		return this.pos;
 	}
-	public void move(Point newPos) {
-		//not implemented yet
+	public Gamestate move(Point newPos) {
+		this.pos = newPos;
+		return Gamestate.valueOf("TURN_HOUND");
 	}
 	
-	public void validateMove(Point newPos) {
+	public void validateMove(Point frompos, Point topos) {
 		//not implemented yet
 	}
 	

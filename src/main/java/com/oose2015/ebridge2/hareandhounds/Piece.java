@@ -7,9 +7,12 @@ public interface Piece {
 	
 	public Point getPos();
 	
-	public void move(Point newpos);
+	public String getPlayer();
 	
-	public void validateMove(Point newpos);
+	public Gamestate move(Point newpos);
+
+	public void validateMove(Point frompos, Point topos);
 	
 	public HashMap<String,String> getAttrs();
+
 }

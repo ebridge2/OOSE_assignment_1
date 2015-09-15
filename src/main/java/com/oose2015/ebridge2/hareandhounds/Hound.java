@@ -10,14 +10,15 @@ public class Hound implements Piece {
 //	String playerid;
 	/** an internal tracker for the piecetype */
 	private PieceType ptype;
+	/** track the player id of the piece */
+	private final String playerid;
 	/** a hashmap to track the history of the points the hare has been*/
 	HashMap<Point, Integer> history;
-	public Hound() {
-		//does nothing
-	}
-	public Hound(Point startpos) {
+
+	public Hound(Point startpos, String pid) {
 		//initialize hare piece
 		this.pos=startpos;
+		this.playerid = pid;
 		this.ptype = PieceType.valueOf("HOUND");
 		this.history = new HashMap<>();
 		history.put(startpos,  1);
@@ -29,11 +30,15 @@ public class Hound implements Piece {
 	public Point getPos() {
 		return this.pos;
 	}
-	public void move(Point newPos) {
-		//not implemented yet
+	public String getPlayer() {
+		return this.playerid;
+	}
+	public Gamestate move(Point newPos) {
+		this.pos = newPos;
+		return Gamestate.valueOf("TURN_HARE");
 	}
 	
-	public void validateMove(Point newPos) {
+	public void validateMove(Point frompos, Point topos) {
 		//not implemented yet
 	}
 	
