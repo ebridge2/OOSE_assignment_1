@@ -43,7 +43,7 @@ public class HareandhoundController {
         }, new JsonTransformer());
         put(API_CONTEXT + "/games/:gameId", "application/json", (request, response) -> {
         	response.status(200);
-        	String gameId = request.params(":gameId");
+        	String gameId = request.params(":gameId"); //find the game to add a player to
         	Player player2 = new Player(Player.PLAYER_TWO, PieceType.valueOf("HARE"));
         	Game gamejoin = grepo.getGame(gameId);
         	gamejoin.joinGame(player2);
@@ -53,5 +53,20 @@ public class HareandhoundController {
         	returnMap.put("pieceType",  player2.getType().toString());
         	return returnMap;
         }, new JsonTransformer());
+        //describe the game state
+        get(API_CONTEXT + "/games/:gameId/state", "application/json", (request, response) -> {
+        	response.status(200);
+        	String gameId = request.params(":gameId");
+        	Game gameget = grepo.getGame(gameId); //find the game with the ID
+        	HashMap<String, String> returnMap = new HashMap<>();
+        	returnMap.put("state", String.valueOf(gameget.getState())); //add its state to the return
+        	return returnMap;
+        }, new JsonTransformer());
+        get(API_CONTEXT + "/games/:gameId/board", "application/json", (request, response) -> {
+        	response.status(200);
+        	String gameId=request.params(":gameId");
+        	Game gameget=grepo.getGame(gameId);
+        	return gameget.getDescribeBoard();        	
+        }, new JsonTransformer()); 
     }
 }

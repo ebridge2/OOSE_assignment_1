@@ -1,32 +1,48 @@
 package com.oose2015.ebridge2.hareandhounds;
 
-public class Hound implements Piece {
+import java.awt.Point;
+import java.util.HashMap;
 
-	Integer xpos;
-	Integer ypos;
-	String playerid;
-	public Hound(){
+public class Hound implements Piece {
+	/** a point to track the position of the player */
+	Point pos;
+//	/** the ID of the player */
+//	String playerid;
+	/** an internal tracker for the piecetype */
+	private PieceType ptype;
+	/** a hashmap to track the history of the points the hare has been*/
+	HashMap<Point, Integer> history;
+	public Hound() {
 		//does nothing
 	}
-	public Hound(Integer x, Integer y) {
+	public Hound(Point startpos) {
 		//initialize hare piece
-		this.xpos = x;
-		this.ypos = y;
+		this.pos=startpos;
+		this.ptype = PieceType.valueOf("HOUND");
+		this.history = new HashMap<>();
+		history.put(startpos,  1);
+	}
+	public PieceType getType() {
+		return this.ptype;
 	}
 	
-	public Integer getX() {
-		return this.xpos;
+	public Point getPos() {
+		return this.pos;
 	}
-	public Integer getY() {
-		return this.ypos;
-	}
-	
-	public void move(Integer newx, Integer newy) {
+	public void move(Point newPos) {
 		//not implemented yet
 	}
 	
-	public void validateMove(Integer newx, Integer newy) {
+	public void validateMove(Point newPos) {
 		//not implemented yet
+	}
+	
+	public HashMap<String, String> getAttrs() {
+		HashMap<String, String> retHash = new HashMap<>();
+		retHash.put("pieceType", String.valueOf(this.ptype));
+		retHash.put("x", String.valueOf(Integer.valueOf((int) this.pos.getX())));
+		retHash.put("y", String.valueOf(Integer.valueOf((int) this.pos.getY())));
+		return retHash;
 	}
 	
 }

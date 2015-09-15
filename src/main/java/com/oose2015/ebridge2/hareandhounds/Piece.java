@@ -1,12 +1,15 @@
 package com.oose2015.ebridge2.hareandhounds;
 
+import java.awt.Point;
+import java.util.HashMap;
+
 public interface Piece {
 	
-	public Integer getX();
-	public Integer getY();
+	public Point getPos();
 	
-	public void move(Integer newx, Integer newy);
+	public void move(Point newpos);
 	
-	public void validateMove(Integer newx, Integer newy);
+	public void validateMove(Point newpos);
 	
+	public HashMap<String,String> getAttrs();
 }

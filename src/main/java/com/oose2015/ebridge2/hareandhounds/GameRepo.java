@@ -20,4 +20,8 @@ public class GameRepo {
 	public Game getGame(String gameId) {
 		return this.gamerepo.get(Integer.parseInt(gameId));
 	}
+	private class GameStartInfo {
+		private String pieceType;
+	}
+	GameStartInfo start = new Gson().fromJson(body, GameStartInfo.class);
 }
