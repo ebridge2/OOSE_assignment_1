@@ -3,7 +3,9 @@ package com.oose2015.ebridge2.hareandhounds;
 import java.util.HashMap;
 
 /**
- * a class to describe an incorrect turn exception
+ * a class to describe an incorrectly formatted json request packet
+ * issues could include forgetting a field, misspelling a field,
+ * and other things of that nature
  * @author eric
  *
  */
