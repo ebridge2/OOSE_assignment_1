@@ -167,6 +167,17 @@ public class Game {
 		public String getPlayer() {
 			return this.playerId;
 		}
+		/**
+		 * a method to validate that the turn has everything, and the request was
+		 * clean
+		 */
+		public void validateTurn() throws IncorrectJsonException {
+			if (this.playerId == null || this.fromX == null || this.fromY == null ||
+					this.toX == null || this.toY == null) {
+				throw new IncorrectJsonException("your Json request for a turn "
+						+ "was formatted improperly.");
+			}
+		}
 	}
 	/**
 	 * simulates one turn of the game
