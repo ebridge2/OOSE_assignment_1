@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.awt.Point;
 import com.google.gson.Gson;
+import com.oose2015.ebridge2.hareandhounds.Game.Turn;
 
 /**
  * a class that contains a repository of all the games for a server
+ * the class is also responsible for deserializing all json requests
+ * and appropriately passing the necessary information to the requested
+ * games
  * @author eric
  *
  */
@@ -43,8 +47,8 @@ public class GameRepo {
 	public HashMap<String, String> addGame(String body) {
 		HashMap<String, String> returnMap = new HashMap<>();
 		GameStartInfo start = new Gson().fromJson(body, GameStartInfo.class);
-		Player player1 = new Player(Player.PLAYER_ONE, PieceType.valueOf(start.getpType()));
-		Game newgame = new Game(++this.numgames, player1);
+		Game newgame = new Game(++this.numgames); //increment the game counter
+		Player player1 = newgame.addFirstPlayer(start.getpType());
 		this.gamerepo.put(this.numgames,  newgame);
 		returnMap.put("gameId", newgame.getId());
 		returnMap.put("playerId", player1.getId());
@@ -55,30 +59,39 @@ public class GameRepo {
 	 * a class for adding a player to the game given a game id
 	 * @param gameid
 	 * @return a hash map of the spec'd format
+	 * @throws InvalidGameException 
+	 * @throws NoSpaceException 
 	 */
-	public HashMap<String, String> addPlayer(String gameid) {
+	public HashMap<String, String> addPlayer(String gameid) throws InvalidGameException,
+			NoSpaceException {
 		HashMap<String, String> returnMap = new HashMap<>();
 		Game gamejoin = this.getGame(gameid);
-		String ptypeToAdd;
-		if (gamejoin.needHare()) {
-			ptypeToAdd = "HARE";
-		} else {
-			ptypeToAdd = "HOUND";
-		}
-		Player player2 = new Player(Player.PLAYER_TWO, PieceType.valueOf(ptypeToAdd));
-		gamejoin.joinGame(player2);
+		Player playerAdded = gamejoin.joinGame(); //return player so you can format the map
     	returnMap.put("gameId",  gamejoin.getId());
-    	returnMap.put("playerId",  player2.getId());
-    	returnMap.put("pieceType",  player2.getType().toString());		
+    	returnMap.put("playerId",  playerAdded.getId());
+    	returnMap.put("pieceType",  playerAdded.getType());		
 		return returnMap;
 	}
-	public HashMap<String, String> fetchState(String gameid) {
+	/**
+	 * a method to return the state of a specified game.
+	 * @param gameid the game to fetch
+	 * @return the game state
+	 * @throws InvalidGameException the game was not found
+	 */
+	public HashMap<String, String> fetchState(String gameid) throws InvalidGameException {
     	Game gameget = this.getGame(gameid); //find the game with the ID
     	HashMap<String, String> returnMap = new HashMap<>();
     	returnMap.put("state", String.valueOf(gameget.getState())); //add its state to the return
     	return returnMap;
 	}
-	public List<HashMap<String, String>> fetchBoard(String gameid) {
+	/**
+	 * a method to fetch the board state
+	 * @param gameid the game id to get
+	 * @return the board state, formatted in a list of hash maps (the list of
+	 * formatted hash maps to describe each piece)
+	 * @throws InvalidGameException the game id was not foound
+	 */
+	public List<HashMap<String, String>> fetchBoard(String gameid) throws InvalidGameException {
 		Game gameget = this.getGame(gameid);
 		return gameget.getDescribeBoard();
 	}
@@ -86,35 +99,32 @@ public class GameRepo {
 	 * a function to return a game
 	 * @param gameId the id to return a game for
 	 * @return the game
+	 * @throws InvalidGameException 
 	 */
-	public Game getGame(String gameId) {
-		return this.gamerepo.get(Integer.parseInt(gameId));
+	public Game getGame(String gameId) throws InvalidGameException {
+		Game gameget = this.gamerepo.get(Integer.parseInt(gameId));
+		if (gameget == null) {
+			throw new InvalidGameException("The game id does not exist.");
+		}
+		return gameget;
 	}
-	public class Turn {
-		private String playerId;
-		private String fromX;
-		private String fromY;
-		private String toX;
-		private String toY;
-		
-		public Point getFromPos() {
-			return new Point(Integer.parseInt(this.fromX), Integer.parseInt(this.fromY));
-		}
-		public Point getNewPos() {
-			return new Point(Integer.parseInt(this.toX), Integer.parseInt(this.toY));
-		}
-		public String getPlayer() {
-			return this.playerId;
-		}
-	}
+	/**
+	 * a method that begins a turn for the required game
+	 * @param body the request to be deserialized to a turn
+	 * @param gameid the id of the game
+	 * @return the response in a hash map that can be transformed to json
+	 * @throws InvalidPlayerException wrong player id sent
+	 * @throws IllegalMoveException turn was invalid
+	 * @throws IncorrectTurnException wrong player attempts a turn
+	 * @throws InvalidGameException game id does not exist or game is over
+	 */
 	public HashMap<String, String> move(String body, String gameid) throws InvalidPlayerException, 
 			IllegalMoveException, IncorrectTurnException, InvalidGameException {
 		HashMap<String, String> returnMap = new HashMap<>();
+		//deserialize here, since it would be absolutely gross to deserialize within
+		//the game itself
 		Turn turntake = new Gson( ).fromJson(body, Turn.class);
 		Game gamemove = this.getGame(gameid);
-		if (gamemove == null) {
-			throw new InvalidGameException("The game id does not exist.");
-		}
 		return gamemove.takeTurn(turntake);
 	}
 	

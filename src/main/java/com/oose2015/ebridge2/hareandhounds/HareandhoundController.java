@@ -44,21 +44,44 @@ public class HareandhoundController {
         }, new JsonTransformer());
         //adds a player to an existing game
         put(API_CONTEXT + "/games/:gameId", "application/json", (request, response) -> {
-        	response.status(200);
-        	String gameId = request.params(":gameId"); //find the game to add a player to
-        	return this.grepo.addPlayer(gameId);
+        	try {
+            	String gameId = request.params(":gameId"); //find the game to add a player to
+        		HashMap<String, String> returnMap = this.grepo.addPlayer(gameId);
+        		response.status(200);
+        		return returnMap;
+        	} catch (NoSpaceException ex) {
+        		logger.error(ex.getMessage());
+        		response.status(410);
+        		return ex.getHash();
+        	} catch (InvalidGameException ex) {
+        		logger.error(ex.getMessage());
+        		response.status(404);
+        		return ex.getHash();
+        	}
         }, new JsonTransformer());
         //describe the game state
         get(API_CONTEXT + "/games/:gameId/state", "application/json", (request, response) -> {
-        	response.status(200);
-        	String gameId = request.params(":gameId");
-        	return this.grepo.fetchState(gameId);
-        }, new JsonTransformer());
+	        try {
+        		String gameId = request.params(":gameId");
+	        	HashMap<String, String> returnMap = this.grepo.fetchState(gameId);
+	        	response.status(200);
+	        } catch (InvalidGameException ex) {
+	        	logger.error(ex.getMessage());
+	        	response.status(404);
+	        	return ex.getHash();
+	        }
+	    }, new JsonTransformer());
         //retrieves the board states
         get(API_CONTEXT + "/games/:gameId/board", "application/json", (request, response) -> {
+        	try {
         		response.status(200);
         		String gameId=request.params(":gameId");
-        		return this.grepo.fetchBoard(gameId);        	
+        		return this.grepo.fetchBoard(gameId);      
+	        } catch (InvalidGameException ex) {
+	        	logger.error(ex.getMessage());
+	        	response.status(404);
+	        	return ex.getHash();
+	        }
         }, new JsonTransformer());
         // a move of a game post
         post(API_CONTEXT + "/games/:gameId/turns", "application/json", (request, response) -> {
@@ -68,19 +91,19 @@ public class HareandhoundController {
         		response.status(200);
         		return returnMap;
         	} catch (InvalidGameException ex) {
-        		logger.error("Invalid Game Id");
+        		logger.error(ex.getMessage());
         		response.status(404);
         		return ex.getHash();
         	} catch (InvalidPlayerException ex) {
-        		logger.error("Invalid player id");
+        		logger.error(ex.getMessage());
         		response.status(404);
         		return ex.getHash();
         	} catch (IncorrectTurnException ex) {
-        		logger.error("Incorrect turn taken");
+        		logger.error(ex.getMessage());
         		response.status(422);
         		return ex.getHash();
         	} catch (IllegalMoveException ex) {
-        		logger.error("Illegal move");
+        		logger.error(ex.getMessage());
         		response.status(422);
         		return ex.getHash();
         	}

@@ -3,21 +3,21 @@ package com.oose2015.ebridge2.hareandhounds;
 import java.util.HashMap;
 
 /**
- * the invalid player exception
+ * a constructor for an exception when a game has no space
+ * and a player tries to join
  * @author eric
  *
  */
-public class InvalidPlayerException extends Exception {
-	/** the response hash map*/
+public class NoSpaceException extends Exception {
 	private HashMap<String, String> response;
 	/**
-	 * a constructor for the invalid player exception
-	 * @param message the context
+	 * the constructor of a nospaceexception
+	 * @param message the context 
 	 */
-	public InvalidPlayerException(String message) {
+	public NoSpaceException(String message) {
 		super(message);
 		this.response = new HashMap<>();
-		this.response.put("reason", "INVALID_PLAYER_ID");
+		this.response.put("reason", "NO_SPACE");
 	}
 	/**
 	 * a getter for the formatted response to be transformed to json
