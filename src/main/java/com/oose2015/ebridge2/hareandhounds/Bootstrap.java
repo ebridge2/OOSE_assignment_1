@@ -8,15 +8,7 @@ package com.oose2015.ebridge2.hareandhounds;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sqlite.SQLiteDataSource;
-
-import javax.sql.DataSource;
-
 import static spark.Spark.*;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * the application bootstrap

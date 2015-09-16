@@ -6,72 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 /**
  * a class to implement the piece interface for a hare
+ * extends the piecebase to keep code more concise, since there
+ * are many commonalities between the two pieces (Hare and hound)
  * @author eric
  *
  */
-public class Hare implements Piece {
-	/** a point to track the position of the player */
-	private Point pos;
-	/** a way to track the piece type internally for the json return*/
-	private PieceType ptype;
-	/** the player who owns the piece */
-	private final String playerid;
-	/** a hashmap to track the history of the points the hare has been*/
-	HashMap<Point, Integer> history;
-	/** the turn when this piece should go.*/
-	private Gamestate nextTurn = Gamestate.valueOf("TURN_HOUND");
-	/** the Points that can only have vert/horizontal moves */
-	private final List<Point> oneSpace;
+public class Hare extends PieceBase implements Piece {
 	/**
-	 * the constructor for a hare
+	 * the constructor for a hare that extends the piecebase
 	 * @param startpos the starting position of the hare
 	 * @param pid the player id of the hare
 	 */
 	public Hare(Point startpos, String pid) {
 		//initialize hare piece
-		this.pos=startpos;
-		this.ptype = PieceType.valueOf("HARE");
-		this.playerid = pid;
-		this.history = new HashMap<>();
-		history.put(startpos,  1);
-		this.oneSpace = new ArrayList<>();
-		this.populateOneSpace();
-	}
-	private void populateOneSpace() {
-		this.oneSpace.add(new Point(1,1));
-		this.oneSpace.add(new Point(2,2));
-		this.oneSpace.add(new Point(2,0));
-		this.oneSpace.add(new Point(3,1));
-	}
-	/**
-	 * returns the type of the piece
-	 * @return the type of the piece
-	 */
-	public String getType() {
-		return String.valueOf(this.ptype);
-	}
-	/**
-	 * getter for the id of the player who owns
-	 * @return the id of the player who owns
-	 */
-	public String getPlayer() {
-		return this.playerid;
-	}
-	/**
-	 * getter for the position of the piece
-	 * @return the position of the piece
-	 */
-	public Point getPos() {
-		return this.pos;
-	}
-	/**
-	 * returns the next gamestate after the move. The end conditions
-	 * will all be handled externally by the board itself.
-	 * @return the gamestate of the next move, the hound.
-	 */
-	public Gamestate move(Point newPos) {
-		this.pos = newPos;
-		return this.nextTurn;
+		super(startpos, pid);
+		this.ptype = PieceType.HARE;
+		this.nextTurn = Gamestate.TURN_HOUND;
 	}
 	/**
 	 * validates a move
@@ -94,16 +44,6 @@ public class Hare implements Piece {
 			throw new IllegalMoveException("that move is too far.");
 		}
 	}
-	/**
-	 * returns the attributes of the piece
-	 * @return the attributes formatted to a hahsmap
-	 */
-	public HashMap<String, String> getAttrs() {
-		HashMap<String, String> retHash = new HashMap<>();
-		retHash.put("pieceType", String.valueOf(this.ptype));
-		retHash.put("x", String.valueOf(Integer.valueOf((int) this.pos.getX())));
-		retHash.put("y", String.valueOf(Integer.valueOf((int) this.pos.getY())));
-		return retHash;
-	}
+
 	
 }

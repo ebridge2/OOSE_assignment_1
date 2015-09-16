@@ -5,16 +5,9 @@
 
 package com.oose2015.ebridge2.hareandhounds;
 
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-
-import java.util.Collections;
 import java.util.HashMap;
-
 import static spark.Spark.*;
 
 public class HareandhoundController {
@@ -65,6 +58,7 @@ public class HareandhoundController {
         		String gameId = request.params(":gameId");
 	        	HashMap<String, String> returnMap = this.grepo.fetchState(gameId);
 	        	response.status(200);
+	        	return returnMap;
 	        } catch (InvalidGameException ex) {
 	        	logger.error(ex.getMessage());
 	        	response.status(404);

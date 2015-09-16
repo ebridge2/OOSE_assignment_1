@@ -6,11 +6,9 @@
 package com.oose2015.ebridge2.hareandhounds;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.awt.Point;
-import com.google.gson.annotations.Expose;
 /**
  * a game class that contains the game and ordered collection of players
  * baed on their turn. It has a board, a state, an id, and a playerlist.
