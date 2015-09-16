@@ -9,9 +9,7 @@ Contact: ericwb95@gmail.com
 Course: OOSE Assignment 1
 -------------------------
 
-This repository contains a Hare and Hound Game Implementation. The game is complete to my knowledge, and elegantly handles all of the required exceptions in addition to some others
-
-I thought would be necessary (pieces already in locations, choosing non pieces, choosing an opponent's piece, etc). 
+This repository contains a Hare and Hound Game Implementation. The game is complete to my knowledge, and elegantly handles all of the required exceptions in addition to some others I thought would be necessary (pieces already in locations, choosing non pieces, choosing an opponent's piece, etc). 
 
 Setup
 -----
